@@ -1,0 +1,4 @@
+# local
+.DS_Stor
+node_modules/
+.next/
