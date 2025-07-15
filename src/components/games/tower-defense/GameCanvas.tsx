@@ -8,7 +8,7 @@ interface GameCanvasInterface {
     className: string
 }
 
-export default const GameCanvas: GameCanvasInterface = (height, width, className) => {
+export default function GameCanvas({height, width, className}: GameCanvasInterface): any {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     
     useEffect(() => {
