@@ -13,7 +13,6 @@ export class Tower {
   radius: number;
   color: string;
   archetype: string;
-
   fireCooldown: number;
 
   constructor(config: TowerConfig, x: number, y: number) {
@@ -65,20 +64,29 @@ export class Tower {
     return null;
   }
 
-  draw(ctx: CanvasRenderingContext2D) {
-    // Tower base
+  draw(ctx: CanvasRenderingContext2D, isPreview: boolean = false) {
+    // Tower body
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
     ctx.fillStyle = this.color;
+    ctx.globalAlpha = isPreview ? 0.4 : 1;
     ctx.fill();
-
-    // Draw range
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.range, 0, Math.PI * 2);
-    ctx.strokeStyle = 'rgba(255,255,255,0.2)';
-    ctx.lineWidth = 1;
-    ctx.setLineDash([5, 5]);
-    ctx.stroke();
-    ctx.setLineDash([]);
+    ctx.globalAlpha = 1;
+  
+    if (isPreview) {
+      // Draw range indicator (dashed)
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.range, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+      ctx.setLineDash([4, 4]);
+      ctx.lineWidth = 1;
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+  
+    if (!isPreview) {
+      ctx.fillStyle = 'white';
+    }
   }
+  
 }

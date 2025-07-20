@@ -41,6 +41,7 @@ export default function GameCanvas({
     });
     const mouse = useRef({ x: 0, y: 0, visible: false });
     const placingTower = useRef(true);
+    const selectedTower = useRef<Tower | null>(null);
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -61,25 +62,41 @@ export default function GameCanvas({
         window.addEventListener('keydown', handleKeyDown);
 
         const handleCanvasClick = (event: MouseEvent) => {
-            if (!placingTower.current) return;
-
             const rect = canvas.getBoundingClientRect();
             const x = event.clientX - rect.left;
             const y = event.clientY - rect.top;
 
-            const config = TowerTypes[selectedTowerId];
-            if (!config) return;
+            // Check if clicking on an existing tower first
+            const clickedTower = gameStateRef.current.towers.find(tower => {
+                const dx = tower.x - x;
+                const dy = tower.y - y;
+                const dist = Math.hypot(dx, dy);
+                return dist <= tower.radius;
+            });
 
-            const valid = isValidPlacement(x, y, config.radius);
-            if (!valid) return;
+            if (clickedTower) {
+                selectedTower.current = clickedTower;
+                return;
+            } else {
+                selectedTower.current = null; // click away clears selection
+            }
 
-            const tower = new Tower(config, x, y);
-            gameStateRef.current.towers.push(tower);
+            // If placing a tower, handle tower placement
+            if (placingTower.current) {
+                const config = TowerTypes[selectedTowerId];
+                if (!config) return;
 
-            // Unselect tower
-            placingTower.current = false;
-            mouse.current.visible = false;
-            setSelectedTowerId('');
+                const valid = isValidPlacement(x, y, config.radius);
+                if (!valid) return;
+
+                const tower = new Tower(config, x, y);
+                gameStateRef.current.towers.push(tower);
+
+                // Unselect tower
+                placingTower.current = false;
+                mouse.current.visible = false;
+                setSelectedTowerId('');
+            }
         }
 
         canvas.addEventListener('click', handleCanvasClick);
@@ -87,9 +104,21 @@ export default function GameCanvas({
         function handleMouseMove(event: MouseEvent) {
             if (!canvas) return;
             const rect = canvas.getBoundingClientRect();
-            mouse.current.x = event.clientX - rect.left;
-            mouse.current.y = event.clientY - rect.top;
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+            mouse.current.x = x;
+            mouse.current.y = y;
             mouse.current.visible = true;
+          
+            // Cursor style: pointer if over a tower
+            const overTower = gameStateRef.current.towers.some(tower => {
+              const dx = tower.x - x;
+              const dy = tower.y - y;
+              const dist = Math.hypot(dx, dy);
+              return dist <= tower.radius;
+            });
+          
+            canvas.style.cursor = overTower ? 'pointer' : 'default';
         }
 
         canvas.addEventListener('mousemove', handleMouseMove);
@@ -202,26 +231,32 @@ export default function GameCanvas({
                 enemy.draw(ctx);
             }
 
-            gameStateRef.current.towers.forEach((tower) => tower.draw(ctx));
+            gameStateRef.current.towers.forEach((tower) => {
+                tower.draw(ctx, false);
+                if (selectedTower.current === tower) {
+                    ctx.beginPath();
+                    ctx.arc(tower.x, tower.y, tower.radius + 4, 0, Math.PI * 2);
+                    ctx.strokeStyle = 'white';
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+                  }
+            });
 
             if (mouse.current.visible && placingTower.current) {
                 const config = TowerTypes[selectedTowerId];
                 if (config) {
                     const valid = isValidPlacement(mouse.current.x, mouse.current.y, config.radius);
+                    const ghostTower = new Tower(config, mouse.current.x, mouse.current.y);
+                    ghostTower.draw(ctx, true);
 
-                    // Tower body
-                    ctx.beginPath();
-                    ctx.arc(mouse.current.x, mouse.current.y, config.radius, 0, Math.PI * 2);
-                    ctx.fillStyle = valid ? 'rgba(0, 255, 0, 0.3)' : 'rgba(255, 0, 0, 0.3)';
-                    ctx.fill();
-
-                    // Range circle
-                    ctx.beginPath();
-                    ctx.arc(mouse.current.x, mouse.current.y, config.range, 0, Math.PI * 2);
-                    ctx.strokeStyle = valid ? 'rgba(0,255,0,0.2)' : 'rgba(255,0,0,0.2)';
-                    ctx.setLineDash([5, 5]);
-                    ctx.stroke();
-                    ctx.setLineDash([]);
+                    // Optionally: outline in red if invalid
+                    if (!valid) {
+                        ctx.beginPath();
+                        ctx.arc(mouse.current.x, mouse.current.y, config.radius + 2, 0, Math.PI * 2);
+                        ctx.strokeStyle = 'rgba(255, 0, 0, 0.6)';
+                        ctx.lineWidth = 2;
+                        ctx.stroke();
+                    }
                 }
             }
 

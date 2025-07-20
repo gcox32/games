@@ -8,4 +8,5 @@ export type TowerConfig = {
   fireRate: number; // shots per second
   radius: number;
   color: string;
+  icon?: string;
 };

@@ -21,7 +21,7 @@ export default function TowerDefensePage() {
       <GameCanvas
         height={800}
         width={800}
-        className={'rounded shadow-lg'}
+        className={'rounded-lg shadow-lg border-2 border-gray-300'}
         route={ViridianForestRoute}
         gameState={gameState}
         setCurrentWave={setCurrentWave}

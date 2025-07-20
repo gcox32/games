@@ -35,14 +35,17 @@ export default function GameUI({
         {Object.values(TowerTypes).map((tower: TowerConfig) => (
           <button
             key={tower.id}
-            className={` py-1 rounded border text-xs cursor-pointer w-[60px] h-[60px] ${selectedTowerId === tower.id
+            className={`transition-all hover:outline-2 hover:outline-blue-500 duration-100 py-1 rounded border text-xs cursor-pointer w-[60px] h-[60px] ${selectedTowerId === tower.id
               ? 'bg-blue-500 text-white border-blue-600'
               : 'bg-white text-black border-gray-300'
               }`}
-              onClick={() => onSelectTower(selectedTowerId === tower.id ? '' : tower.id)}
-          >
-            {tower.id}
-          </button>
+            onClick={() => onSelectTower(selectedTowerId === tower.id ? '' : tower.id)}
+            style={{ 
+              backgroundImage: `url(${tower.icon})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center'
+            }}
+          />
 
         ))}
       </div>

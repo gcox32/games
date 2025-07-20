@@ -23,7 +23,7 @@ export class Projectile {
 
         if (dist < this.radius + this.target.radius) {
             this.target.health -= this.damage;
-            return true; // hit → remove
+            return true;
         }
 
         const dirX = dx / dist;
@@ -31,7 +31,7 @@ export class Projectile {
         this.x += dirX * this.speed * dt;
         this.y += dirY * this.speed * dt;
 
-        return false; // not yet hit
+        return false;
     }
 
     draw(ctx: CanvasRenderingContext2D) {
