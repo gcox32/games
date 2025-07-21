@@ -2,6 +2,9 @@ import { Route } from '../types';
 
 export const ViridianForestRoute: Route = {
   name: 'Viridian Forest',
+  backgroundColor: '#2e6f40',
+  pathColor: '#8B7355',
+  pageBackground: 'https://assets.letmedemo.com/public/gameboy/images/pokemon/locations/viridian-forest.png',
   path: {
     points: [
       { x: 400, y: 800 },

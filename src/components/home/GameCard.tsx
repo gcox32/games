@@ -10,15 +10,15 @@ interface GameCardProps {
 
 export default function GameCard({ id, title, description, icon, href }: GameCardProps) {
   return (
-    <Link href={href} className="group block">
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-200 dark:border-gray-700">
-        <div className="flex items-center justify-center w-16 h-16 mx-auto mb-4 bg-blue-100 dark:bg-blue-900 rounded-full text-blue-600 dark:text-blue-400 group-hover:bg-blue-200 dark:group-hover:bg-blue-800 transition-colors">
+    <Link href={href} className="group block" id={id}>
+      <div className="bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl p-6 border border-gray-200 dark:border-gray-700 rounded-xl transition-all hover:-translate-y-1 duration-300 transform">
+        <div className="flex justify-center items-center bg-blue-100 dark:bg-blue-900 dark:group-hover:bg-blue-800 group-hover:bg-blue-200 mx-auto mb-4 rounded-full w-16 h-16 text-blue-600 dark:text-blue-400 transition-colors">
           {icon}
         </div>
-        <h3 className="text-xl font-semibold text-gray-900 dark:text-white text-center mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+        <h3 className="mb-2 font-semibold text-gray-900 dark:group-hover:text-blue-400 dark:text-white group-hover:text-blue-600 text-xl text-center transition-colors">
           {title}
         </h3>
-        <p className="text-gray-600 dark:text-gray-300 text-center text-sm leading-relaxed">
+        <p className="text-gray-600 dark:text-gray-300 text-sm text-center leading-relaxed">
           {description}
         </p>
       </div>

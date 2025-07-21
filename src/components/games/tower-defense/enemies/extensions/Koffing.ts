@@ -2,10 +2,15 @@ import type { EnemyExtension } from '../spawnEnemy';
 
 const Koffing: EnemyExtension = {
   id: 'Koffing',
-  archetype: 'tank',
   health: 30,
   type: 'POISON',
-  imageRef: '/images/enemies/koffing.svg'
+  imageRef: '/sprites/koffing.png',
+  speed: 60,
+  width: 64,
+  height: 64,
+  color: 'darkgray',
+  frameCount: 6,
+  frameRate: 8,
 };
 
 export default Koffing;

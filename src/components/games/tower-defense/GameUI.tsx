@@ -21,17 +21,17 @@ export default function GameUI({
   route
 }: Props) {
   return (
-    <div className="flex flex-col items-center gap-4 text-center h-[800px] w-[200px] p-4 border-2 border-gray-300 rounded-lg justify-between">
+    <div className="flex flex-col justify-between items-center gap-4 bg-white dark:bg-gray-900 shadow-lg p-4 border-2 border-gray-300 rounded-lg w-[240px] h-[800px] text-center">
 
       <div className="flex flex-col gap-2">
-        <div className="text-sm text-gray-700">
+        <div className="text-gray-700 dark:text-white text-sm">
           {route}
         </div>
-        <div className="text-sm text-gray-700">
+        <div className="text-gray-700 dark:text-white text-sm">
           Wave: {currentWave + 1}
         </div>
       </div>
-      <div className="flex gap-2 flex-wrap mx-auto">
+      <div className="flex flex-wrap gap-2 mx-auto">
         {Object.values(TowerTypes).map((tower: TowerConfig) => (
           <button
             key={tower.id}
@@ -50,7 +50,7 @@ export default function GameUI({
         ))}
       </div>
       <button
-        className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition w-full cursor-pointer"
+        className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded w-full text-white transition cursor-pointer"
         onClick={onToggleGame}
       >
         {gameState === 'running' ? 'Pause' : 'Start'}

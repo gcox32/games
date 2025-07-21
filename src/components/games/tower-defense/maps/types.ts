@@ -15,6 +15,9 @@ export type RouteWave = WaveInstruction[];
 
 export type Route = {
   name: string;
+  backgroundColor: string;
+  pathColor: string;
+  pageBackground: string;
   path: RoutePath;
   waves: RouteWave[];
 };

@@ -20,15 +20,15 @@ export default function GameGrid({ games, searchQuery }: GameGridProps) {
   );
 
   return (
-    <div className="max-w-6xl mx-auto">
+    <div className="mx-auto max-w-6xl">
       {filteredGames.length === 0 ? (
-        <div className="text-center py-12">
+        <div className="py-12 text-center">
           <p className="text-gray-500 dark:text-gray-400 text-lg">
-            No games found matching "{searchQuery}"
+            {`No games found matching "${searchQuery}"`}
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="gap-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {filteredGames.map((game) => (
             <GameCard
               key={game.id}

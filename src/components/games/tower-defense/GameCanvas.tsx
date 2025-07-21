@@ -52,6 +52,9 @@ export default function GameCanvas({
         let animationFrameId: number;
         let lastTime = performance.now();
 
+        // --- Fix 1: Copy mouse.current for cleanup ---
+        const mouseRefForCleanup = mouse.current;
+
         const handleKeyDown = (event: KeyboardEvent) => {
             if (event.key === 'Escape') {
                 placingTower.current = false;
@@ -201,12 +204,12 @@ export default function GameCanvas({
         };
 
         const render = (ctx: CanvasRenderingContext2D) => {
-            ctx.fillStyle = '#2e6f40';
+            ctx.fillStyle = route.backgroundColor;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
             // Draw path with dirt-like appearance
             ctx.lineWidth = 32;
-            ctx.strokeStyle = '#8B7355'; // Saddle brown for base dirt color
+            ctx.strokeStyle = route.pathColor; // Saddle brown for base dirt color
             ctx.lineCap = 'round';
             ctx.lineJoin = 'round';
             ctx.beginPath();
@@ -269,11 +272,13 @@ export default function GameCanvas({
             cancelAnimationFrame(animationFrameId);
             canvas.removeEventListener('click', handleCanvasClick);
             canvas.removeEventListener('mousemove', handleMouseMove);
-            canvas.removeEventListener('mouseleave', () => (mouse.current.visible = false));
+            // Use the copied ref for cleanup
+            canvas.removeEventListener('mouseleave', () => (mouseRefForCleanup.visible = false));
             window.removeEventListener('keydown', handleKeyDown);
         };
 
-    }, [route, gameState, selectedTowerId]);
+    // --- Fix 2: Add missing dependencies ---
+    }, [route, gameState, selectedTowerId, setCurrentWave, setSelectedTowerId]);
 
     useEffect(() => {
         if (selectedTowerId) {

@@ -21,7 +21,7 @@ export class Projectile {
         const dy = this.target.y - this.y;
         const dist = Math.hypot(dx, dy);
 
-        if (dist < this.radius + this.target.radius) {
+        if (dist < this.radius + this.target.width / 2) {
             this.target.health -= this.damage;
             return true;
         }
